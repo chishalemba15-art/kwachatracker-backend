@@ -1,0 +1,33 @@
+{
+    "ServiceName": "kwachatracker-api",
+    "SourceConfiguration": {
+        "AuthenticationConfiguration": {
+            "AccessRoleArn": "arn:aws:iam::296093722884:role/AppRunnerECRAccessRole"
+        },
+        "ImageRepository": {
+            "ImageIdentifier": "296093722884.dkr.ecr.us-east-1.amazonaws.com/kwachatracker-api:latest",
+            "ImageRepositoryType": "ECR",
+            "ImageConfiguration": {
+                "Port": "8080",
+                "RuntimeEnvironmentVariables": {
+                    "PORT": "8080",
+                    "ENVIRONMENT": "production",
+                    "JWT_SECRET": "kwacha-tracker-jwt-secret-2026-secure-key",
+                    "GEMINI_API_KEY": "AIzaSyCfTbWt3D4-zCDHpko6_dzz45nO5xrspu8"
+                }
+            }
+        }
+    },
+    "InstanceConfiguration": {
+        "Cpu": "0.25 vCPU",
+        "Memory": "0.5 GB"
+    },
+    "HealthCheckConfiguration": {
+        "Protocol": "HTTP",
+        "Path": "/health",
+        "Interval": 10,
+        "Timeout": 5,
+        "HealthyThreshold": 1,
+        "UnhealthyThreshold": 5
+    }
+}

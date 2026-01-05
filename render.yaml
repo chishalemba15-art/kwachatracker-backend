@@ -1,0 +1,33 @@
+# Render Blueprint - Kwacha Tracker API
+# Deploy with: https://render.com/deploy
+
+services:
+  # Web Service (Go API)
+  - type: web
+    name: kwachatracker-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: oregon
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: ENVIRONMENT
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        value: AIzaSyCfTbWt3D4-zCDHpko6_dzz45nO5xrspu8
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kwachatracker-db
+          property: connectionString
+    healthCheckPath: /health
+
+databases:
+  # PostgreSQL Database
+  - name: kwachatracker-db
+    databaseName: kwachatracker
+    user: kwachatracker
+    plan: free
+    region: oregon

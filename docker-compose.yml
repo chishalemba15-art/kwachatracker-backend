@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/kwachatracker?sslmode=disable
+      - JWT_SECRET=${JWT_SECRET:-your-secure-jwt-secret-here}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FIREBASE_CREDENTIALS=/app/firebase-credentials.json
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./firebase-credentials.json:/app/firebase-credentials.json:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=kwachatracker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
