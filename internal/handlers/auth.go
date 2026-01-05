@@ -45,8 +45,8 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		// Create new user with consent enabled by default
 		userID = uuid.New()
 		_, err = database.DB.Exec(
-			`INSERT INTO users (id, device_id, fcm_token, operator, consent_given, consent_date) 
-			 VALUES ($1, $2, $3, $4, true, $5)`,
+			`INSERT INTO users (id, device_id, fcm_token, operator, consent_analytics, consent_ai, consent_given, consent_date) 
+			 VALUES ($1, $2, $3, $4, true, true, true, $5)`,
 			userID, req.DeviceID, req.FCMToken, req.Operator, time.Now(),
 		)
 		if err != nil {
@@ -62,7 +62,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		// Update FCM token and enable consent if provided
 		if req.FCMToken != "" {
 			database.DB.Exec(`UPDATE users 
-				SET fcm_token = $1, consent_given = true, consent_date = $2, updated_at = $3 
+				SET fcm_token = $1, consent_analytics = true, consent_ai = true, consent_given = true, consent_date = $2, updated_at = $3 
 				WHERE id = $4`,
 				req.FCMToken, time.Now(), time.Now(), userID)
 		}
