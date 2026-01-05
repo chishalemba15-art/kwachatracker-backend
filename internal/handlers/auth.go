@@ -42,11 +42,12 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	).Scan(&userID)
 
 	if err == sql.ErrNoRows {
-		// Create new user
+		// Create new user with consent enabled by default
 		userID = uuid.New()
 		_, err = database.DB.Exec(
-			`INSERT INTO users (id, device_id, fcm_token, operator) VALUES ($1, $2, $3, $4)`,
-			userID, req.DeviceID, req.FCMToken, req.Operator,
+			`INSERT INTO users (id, device_id, fcm_token, operator, consent_given, consent_date) 
+			 VALUES ($1, $2, $3, $4, true, $5)`,
+			userID, req.DeviceID, req.FCMToken, req.Operator, time.Now(),
 		)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
@@ -58,10 +59,12 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	} else {
 		exists = true
-		// Update FCM token if provided
+		// Update FCM token and enable consent if provided
 		if req.FCMToken != "" {
-			database.DB.Exec("UPDATE users SET fcm_token = $1, updated_at = $2 WHERE id = $3",
-				req.FCMToken, time.Now(), userID)
+			database.DB.Exec(`UPDATE users 
+				SET fcm_token = $1, consent_given = true, consent_date = $2, updated_at = $3 
+				WHERE id = $4`,
+				req.FCMToken, time.Now(), time.Now(), userID)
 		}
 	}
 
