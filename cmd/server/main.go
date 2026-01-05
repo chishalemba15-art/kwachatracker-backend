@@ -38,14 +38,15 @@ func main() {
 	}
 
 	// Initialize Firebase Cloud Messaging (optional - fails gracefully)
+	// Supports both FIREBASE_CREDENTIALS_BASE64 env var and file path
 	var fcmService *services.FCMService
-	if _, err := os.Stat(cfg.FirebaseCredentialsPath); err == nil {
-		fcmService, err = services.NewFCMService(cfg.FirebaseCredentialsPath)
-		if err != nil {
-			log.Printf("⚠️ FCM initialization failed (notifications disabled): %v", err)
-		}
-	} else {
-		log.Println("⚠️ Firebase credentials not found, push notifications disabled")
+	var fcmErr error
+
+	// Try to initialize FCM (service will check env var first, then file)
+	fcmService, fcmErr = services.NewFCMService(cfg.FirebaseCredentialsPath)
+	if fcmErr != nil {
+		log.Printf("⚠️ FCM initialization failed (notifications disabled): %v", fcmErr)
+		fcmService = nil
 	}
 
 	// Initialize Gemini AI Service (optional - fails gracefully)
