@@ -155,7 +155,7 @@ func (h *AdminHandler) GetInsights(c *gin.Context) {
 
 	// filters first
 	query := `
-		SELECT id, user_id, insight_type, content, generated_at, delivered
+		SELECT id, user_id, category, message, generated_at
 		FROM user_insights
 		WHERE 1=1
 	`
@@ -199,8 +199,9 @@ func (h *AdminHandler) GetInsights(c *gin.Context) {
 			&insight.Type,
 			&insight.Content,
 			&insight.GeneratedAt,
-			&insight.Delivered,
 		)
+		// Default delivered to true for now since we don't track it per insight
+		insight.Delivered = true
 		insights = append(insights, insight)
 	}
 
