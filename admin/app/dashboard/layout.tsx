@@ -17,7 +17,7 @@ export default function DashboardLayout({
 
         <nav className="flex-1 px-4 space-y-1">
           <Link
-            href="/"
+            href="/dashboard"
             className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
           >
             <LayoutDashboard className="h-5 w-5" />
@@ -25,7 +25,7 @@ export default function DashboardLayout({
           </Link>
 
           <Link
-            href="/insights"
+            href="/dashboard/insights"
             className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition bg-purple-600"
           >
             <Brain className="h-5 w-5" />
@@ -33,7 +33,7 @@ export default function DashboardLayout({
           </Link>
 
           <Link
-            href="/users"
+            href="/dashboard/users"
             className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
           >
             <Users className="h-5 w-5" />
@@ -41,7 +41,7 @@ export default function DashboardLayout({
           </Link>
 
           <Link
-            href="/notifications"
+            href="/dashboard/notifications"
             className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
           >
             <Bell className="h-5 w-5" />
@@ -49,7 +49,7 @@ export default function DashboardLayout({
           </Link>
 
           <Link
-            href="/transactions"
+            href="/dashboard/transactions"
             className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
           >
             <CreditCard className="h-5 w-5" />
@@ -57,7 +57,7 @@ export default function DashboardLayout({
           </Link>
 
           <Link
-            href="/analytics"
+            href="/dashboard/analytics"
             className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
           >
             <BarChart3 className="h-5 w-5" />
