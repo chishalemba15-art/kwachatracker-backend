@@ -153,13 +153,14 @@ func (h *AdminHandler) GetInsights(c *gin.Context) {
 
 	offset := (page - 1) * limit
 
+	// filters first
 	query := `
 		SELECT id, user_id, insight_type, content, generated_at, delivered
 		FROM user_insights
 		WHERE 1=1
 	`
-	args := []interface{}{limit, offset}
-	argCount := 2
+	args := []interface{}{}
+	argCount := 0
 
 	if userID != "" {
 		argCount++
@@ -173,7 +174,14 @@ func (h *AdminHandler) GetInsights(c *gin.Context) {
 		args = append(args, dateFrom)
 	}
 
-	query += " ORDER BY generated_at DESC LIMIT $1 OFFSET $2"
+	// Add LIMIT and OFFSET last
+	argCount++
+	query += " ORDER BY generated_at DESC LIMIT $" + strconv.Itoa(argCount)
+	args = append(args, limit)
+
+	argCount++
+	query += " OFFSET $" + strconv.Itoa(argCount)
+	args = append(args, offset)
 
 	rows, err := database.DB.Query(query, args...)
 	if err != nil {
