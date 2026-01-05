@@ -320,7 +320,7 @@ func (h *AdminHandler) GetTransactions(c *gin.Context) {
 
 	offset := (page - 1) * limit
 
-	query := "SELECT id, user_id, type, category, amount, balance_after, description, date FROM transactions WHERE 1=1"
+	query := "SELECT id, user_id, type, category, amount, balance, description, date FROM transactions WHERE 1=1"
 	args := []interface{}{}
 	argCount := 0
 
