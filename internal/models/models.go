@@ -75,3 +75,53 @@ type PushNotification struct {
 	Data     map[string]string `json:"data,omitempty"`
 	ImageURL string            `json:"image_url,omitempty"`
 }
+
+// Admin Models
+
+// AdminStats represents dashboard statistics
+type AdminStats struct {
+	TotalUsers             int      `json:"total_users"`
+	ActiveUsers7d          int      `json:"active_users_7d"`
+	InsightsToday          int      `json:"insights_today"`
+	NotificationsSentToday int      `json:"notifications_sent_today"`
+	TotalTransactions      int      `json:"total_transactions"`
+	APIUsage               APIUsage `json:"api_usage"`
+}
+
+type APIUsage struct {
+	GeminiRequestsToday int     `json:"gemini_requests_today"`
+	EstimatedCost       float64 `json:"estimated_cost"`
+}
+
+// AdminUser represents user data for admin view
+type AdminUser struct {
+	ID               uuid.UUID  `json:"id"`
+	DeviceID         string     `json:"device_id"`
+	FCMToken         string     `json:"fcm_token"`
+	ConsentAnalytics bool       `json:"consent_analytics"`
+	ConsentAI        bool       `json:"consent_ai"`
+	CreatedAt        time.Time  `json:"created_at"`
+	LastSync         *time.Time `json:"last_sync,omitempty"`
+	TransactionCount int        `json:"transaction_count"`
+	InsightsCount    int        `json:"insights_count"`
+}
+
+// AdminInsight represents insight data for admin view
+type AdminInsight struct {
+	ID             uuid.UUID `json:"id"`
+	UserID         uuid.UUID `json:"user_id"`
+	Type           string    `json:"type"`
+	Content        string    `json:"content"`
+	GeneratedAt    time.Time `json:"generated_at"`
+	Delivered      bool      `json:"delivered"`
+	ResponseTimeMs int       `json:"response_time_ms,omitempty"`
+}
+
+// BroadcastRequest represents a push notification broadcast request
+type BroadcastRequest struct {
+	Title        string     `json:"title" binding:"required"`
+	Body         string     `json:"body" binding:"required"`
+	Target       string     `json:"target"` // "all", "active", "specific"
+	UserIDs      []string   `json:"user_ids,omitempty"`
+	ScheduledFor *time.Time `json:"scheduled_for,omitempty"`
+}

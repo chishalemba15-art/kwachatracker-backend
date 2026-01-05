@@ -137,6 +137,24 @@ func main() {
 		}
 	}
 
+	// Admin routes (protected with admin middleware)
+	adminHandler := &handlers.AdminHandler{
+		FCMService:      fcmService,
+		GeminiService:   geminiService,
+		InsightsHandler: insightsHandler,
+	}
+
+	admin := r.Group("/api/v1/admin")
+	admin.Use(middleware.AuthMiddleware(cfg.JWTSecret)) // TODO: Add admin-only middleware
+	{
+		admin.GET("/stats", adminHandler.GetStats)
+		admin.GET("/users", adminHandler.GetUsers)
+		admin.GET("/insights", adminHandler.GetInsights)
+		admin.POST("/insights/trigger", adminHandler.TriggerInsights)
+		admin.POST("/broadcast", adminHandler.Broadcast)
+		admin.GET("/transactions", adminHandler.GetTransactions)
+	}
+
 	// Create server
 	srv := &http.Server{
 		Addr:         ":" + cfg.Port,

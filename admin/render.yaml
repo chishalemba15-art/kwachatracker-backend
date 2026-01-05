@@ -1,0 +1,14 @@
+services:
+  # Admin Dashboard
+  - type: web
+    name: kwachatracker-admin
+    runtime: node
+    repo: https://github.com/your-username/kwachatracker-backend
+    rootDir: admin
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://kwachatracker-api.onrender.com
+      - key: NODE_ENV
+        value: production
