@@ -185,7 +185,7 @@ func (h *AdminHandler) GetInsights(c *gin.Context) {
 
 	rows, err := database.DB.Query(query, args...)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch insights"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch insights", "details": err.Error()})
 		return
 	}
 	defer rows.Close()
@@ -368,7 +368,7 @@ func (h *AdminHandler) GetTransactions(c *gin.Context) {
 
 	rows, err := database.DB.Query(query, args...)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch transactions"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch transactions", "details": err.Error()})
 		return
 	}
 	defer rows.Close()
